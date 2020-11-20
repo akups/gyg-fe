@@ -11,7 +11,9 @@ import "./App.css";
 
 // fetches initial data
 const fetchData = async (setData) => {
-  const result = await fetch("http://localhost:3005/activities");
+  const result = await fetch(
+    "https://creatingmyguide-server.herokuapp.com/activities"
+  );
 
   const data = await result.json();
 
@@ -21,7 +23,7 @@ const fetchData = async (setData) => {
 // fetches the search results (for autocomplete)
 const fetchSearchResults = async (setSearchResults, searchTerm) => {
   const result = await fetch(
-    `http://localhost:3005/activity/search/${searchTerm}`
+    `https://creatingmyguide-server.herokuapp.com/activity/search/${searchTerm}`
   );
   const data = await result.json();
 
@@ -31,7 +33,7 @@ const fetchSearchResults = async (setSearchResults, searchTerm) => {
 // fetches the definitive results for the user and sets all activities to new ones
 const fetchResultsData = async (setData, searchTerm) => {
   const result = await fetch(
-    `http://localhost:3005/activity/search/${searchTerm}`
+    `https://creatingmyguide-server.herokuapp.com/activity/search/${searchTerm}`
   );
   const data = await result.json();
 
