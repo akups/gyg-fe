@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export const TourCard = ({
   id,
@@ -71,6 +72,7 @@ const CardBody = styled.div`
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
+  position: relative;
 `;
 
 const CardTitle = styled.div`
@@ -78,6 +80,9 @@ const CardTitle = styled.div`
   line-height: 1.25rem;
   font-weight: 500;
   color: #1a2b49;
+  text-align: start;
+  padding-bottom: 2rem;
+  height: 90px;
 `;
 
 const CardRoot = styled.div`
@@ -91,6 +96,7 @@ const CardRoot = styled.div`
   margin: 1rem;
   box-shadow: 1px 0 12px rgba(0, 0, 0, 0.13);
   border: 1px solid #c6c8d0;
+  min-width: 270px;
 `;
 
 const CardPrice = styled.div`
@@ -122,6 +128,11 @@ const CardOffer = styled.div`
   margin: 0;
   padding: 0;
   vertical-align: baseline;
+  position: absolute;
+  right: 0px;
+  font-size: 14px;
+  top: 6px;
+  font-weight: 700;
 `;
 
 const basicButton = css`
@@ -134,26 +145,28 @@ export const SearchField = styled.input`
   ${basicButton}
   border-color: #c6c8d0;
   color: #1a2b49;
-  border: 2px solid #c6c8d0;
+  border: 1px solid #c6c8d0;
   padding: 0 2rem 0 0.5rem;
   transition: border 0.16s ease-out;
   vertical-align: middle;
   width: 15vw;
-  height: 3vh;
+
   will-change: border;
+  border-radius: 6px;
+  height: 42px;
 `;
 
 export const SearchButton = styled.button`
   ${basicButton}
-
   background-color: blue;
   color: blue;
   border: 2px solid #c6c8d0;
   padding: 0 2rem 0 0.5rem;
   transition: border 0.16s ease-out;
   vertical-align: middle;
-  width: 3vw;
-  height: 3vh;
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
 `;
 
 export const TourGrid = styled.div`
@@ -195,8 +208,7 @@ const DetailsCardBody = styled.div`
   padding: 1rem;
 `;
 
-const DetailsCardTitle = styled.div`
-  font-size: 1rem;
+const DetailsCardTitle = styled.h1`
   line-height: 1.25rem;
   font-weight: 500;
   color: #1a2b49;
@@ -210,10 +222,7 @@ const DetailsCardRoot = styled.div`
   font-family: GT Eesti, Arial, sans-serif;
   font-size: 1rem;
   background-color: white;
-  min-height: 320px;
   margin: 1rem;
-  box-shadow: 1px 0 12px rgba(0, 0, 0, 0.13);
-  border: 1px solid #c6c8d0;
 `;
 
 const DetailsCardPrice = styled.div`
@@ -245,4 +254,8 @@ const DetailsCardOffer = styled.div`
   margin: 0;
   padding: 0;
   vertical-align: baseline;
+`;
+
+export const StyledLink = styled(Link)`
+  text-decoration: none;
 `;

@@ -1,13 +1,18 @@
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import { debounce } from "lodash";
+import "./App.css";
+
+import Details from "./components/Details";
+
 import {
   TourCard,
   TourGrid,
   SearchField,
   SearchButton,
+  StyledLink,
 } from "./components/styled";
-
-import "./App.css";
 
 // fetches initial data
 const fetchData = async (setData) => {
@@ -48,53 +53,80 @@ function App() {
   // here we store the search term to search when user click on search
   const [searchTerm, setSearchTerm] = useState("");
 
+  const debouncedSearch = useCallback(
+    debounce(
+      (searchTerm) => fetchSearchResults(setSearchResults, searchTerm),
+      1000
+    ),
+    [] // will be created only once initially
+  );
+
   // run searches on re-renders
   useEffect(() => {
     fetchData(setData);
   }, []);
 
   // run searches on re-renders (when search term changes)
-  useEffect(() => {
-    fetchSearchResults(setSearchResults, searchTerm);
-  }, [searchTerm]);
 
   // store the search term in the state
-  const handleChange = async (e) => {
-    debounce(setSearchTerm(e.target.value), 500);
+  const handleChange = async (event) => {
+    const { value: nextValue } = event.target;
+    if (nextValue && nextValue.length) {
+      setSearchTerm(nextValue);
+      debouncedSearch(nextValue);
+    }
   };
+  // used https://divyanshu013.dev/blog/react-debounce-throttle-hooks/ as a reference (useCallback part)
+
   // fetch definitive results
   const handleClick = () => {
-    fetchResultsData(setData, searchTerm);
+    if (searchTerm && searchTerm.length) {
+      fetchResultsData(setData, searchTerm);
+    }
   };
 
   return (
-    <div className="App">
-      <div>
-        <h1>Berlin Tours</h1>
-        <SearchField type="search" onChange={handleChange} />
-        <SearchButton onClick={handleClick}>
-          <img
-            src="./images/search.png"
-            alt="search-icon"
-            style={{ width: " 15px", height: "15px" }}
-          />
-        </SearchButton>
-        {searchResults.map((activity) => (
-          <p>{activity.title}</p>
-        ))}
-      </div>
-      <TourGrid data-test-target="tour-grid">
-        {data.tours.map(({ id, image, ...props }) => {
-          return (
-            <TourCard
-              key={id}
-              {...props}
-              img={`${process.env.PUBLIC_URL}${image}`}
-            />
-          );
-        })}
-      </TourGrid>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/details/:activityId" children={<Details />} />
+        <Route exact path="/">
+          <div className="App">
+            <div>
+              <h1>Berlin Tours @GetYourGuide</h1>
+              <SearchField
+                type="text"
+                onChange={handleChange}
+                placeholder="Best destinations in Berlin..."
+              />
+              <SearchButton onClick={handleClick}>
+                <img
+                  src="./images/search.png"
+                  alt="search-icon"
+                  style={{ width: " auto", height: "19px" }}
+                />
+              </SearchButton>
+              {searchResults.map((activity) => (
+                <p>{activity.title}</p>
+              ))}
+            </div>
+            <TourGrid data-test-target="tour-grid">
+              {data.tours.map(({ id, image, ...props }) => {
+                //we can only spread props when the name we use is the same as the name it has in the original object
+                return (
+                  <StyledLink to={`/details/${id}`}>
+                    <TourCard
+                      {...props}
+                      key={id}
+                      img={`${process.env.PUBLIC_URL}${image}`}
+                    />
+                  </StyledLink>
+                );
+              })}
+            </TourGrid>
+          </div>
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
