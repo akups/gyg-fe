@@ -54,10 +54,11 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const debouncedSearch = useCallback(
-    debounce(
-      (searchTerm) => fetchSearchResults(setSearchResults, searchTerm),
-      1000
-    ),
+    () =>
+      debounce(
+        (searchTerm) => fetchSearchResults(setSearchResults, searchTerm),
+        1000
+      ),
     [] // will be created only once initially
   );
 
